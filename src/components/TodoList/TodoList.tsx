@@ -6,15 +6,15 @@ import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Button from "@mui/material/Button";
 import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "../../state/store";
-import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, TasksType} from "../../state/task-reducer";
+import {RootState} from "../../model/store";
+import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, TasksType} from "../../model/task-reducer";
 import {Task} from "../Task/Task";
 import {
     changeTodoListFilterAC,
     changeTodoListTitleAC,
     FilterType,
     removeTodoListAC
-} from "../../state/todolists-reducer";
+} from "../../model/todolists-reducer";
 
 type TodoListPropsType = {
     id: string

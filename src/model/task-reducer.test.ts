@@ -1,6 +1,13 @@
-import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, taskReducer} from "./task-reducer";
-import {TasksObjType} from "../App";
+import {
+    addTaskAC,
+    changeTaskStatusAC,
+    changeTaskTitleAC,
+    removeTaskAC,
+    taskReducer,
+    TasksObjType
+} from "./task-reducer";
 import {addTodoListAC, removeTodoListAC} from "./todolists-reducer";
+import {beforeEach, test, expect} from "vitest";
 
 let startState: TasksObjType
 
@@ -22,7 +29,6 @@ beforeEach(()=> {
 })
 
 test('correct task should be deleted from correct array', () => {
-
 
     const action = removeTaskAC('2', 'todolistID2')
 

@@ -28,7 +28,7 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = memo((props) => {
 
         const onClickAddTask = () => {
             if (newTaskTitle.trim() !== '') {
-                let correctTaskTitle = capitalizeFirstLetter(newTaskTitle)
+                const correctTaskTitle = capitalizeFirstLetter(newTaskTitle)
                 addItem(correctTaskTitle.trim())
                 setNewTaskTitle('')
             } else {

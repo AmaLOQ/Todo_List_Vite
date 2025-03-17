@@ -7,8 +7,8 @@ import Grid from '@mui/material/Grid2';
 import Container from "@mui/material/Container";
 import Paper from '@mui/material/Paper';
 import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "./state/store";
-import {addTodoListAC, TodoListType} from "./state/todolists-reducer";
+import {RootState} from "./model/store";
+import {addTodoListAC, TodoListType} from "./model/todolists-reducer";
 import {createTheme, ThemeProvider, CssBaseline} from "@mui/material";
 
 

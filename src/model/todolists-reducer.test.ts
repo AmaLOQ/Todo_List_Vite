@@ -4,12 +4,14 @@ import {
     removeTodoListAC,
     todoListsReducer
 } from './todolists-reducer';
-import {FilterType, TodoListType} from "../App";
+import { beforeEach, expect, test } from 'vitest'
+import {FilterType, TodoListType} from "./todolists-reducer.ts"
 
 let firstTodoListID : string
 let secondTodoListID : string
 
 let startState: TodoListType[]
+
 beforeEach(()=> {
     firstTodoListID = v1()
     secondTodoListID = v1()
@@ -21,7 +23,8 @@ beforeEach(()=> {
 
 })
 
-test('correct todo list should be removed', ()=> {
+test('correct todolist should be removed', ()=> {
+
     const action = removeTodoListAC(firstTodoListID)
 
     const endState = todoListsReducer(startState,action)
@@ -33,7 +36,7 @@ test('correct todo list should be removed', ()=> {
 
 
 
-test('correct todo list should be added', ()=> {
+test('correct todolist should be added', ()=> {
 
     const newTodoListTitle = 'What to see'
 
@@ -46,7 +49,7 @@ test('correct todo list should be added', ()=> {
     expect(endState[2].filter).toBe('All')
 })
 
-test('correct todo list should change title', ()=> {
+test('correct todolist should change title', ()=> {
 
     const newTodoListTitle = 'New Title'
 
@@ -59,8 +62,7 @@ test('correct todo list should change title', ()=> {
     expect(endState[1].title).toBe('What to buy')
 })
 
-test('correct todo list should change filter', ()=> {
-
+test('correct todolist should change filter', ()=> {
 
     const newFilterValue: FilterType = 'Completed'
 
