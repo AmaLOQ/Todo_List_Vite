@@ -1,0 +1,15 @@
+.todoListTitle {
+    overflow-wrap: break-word;
+}
+
+.todoListTitleChangeMode:focus {
+    width: 100%;
+
+    background-color: transparent;
+    border: none;
+    outline: none;
+}
+
+.todoListTitleChangeMode, .todoListTitleChangeMode:focus {
+    overflow-wrap: break-word;
+}

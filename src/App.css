@@ -1,0 +1,12 @@
+.app {
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+}
+
+body {
+    margin: 0;
+    display: flex;
+    min-width: 320px;
+    min-height: 100vh;
+}
