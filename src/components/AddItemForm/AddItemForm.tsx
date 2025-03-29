@@ -1,5 +1,5 @@
 import React, {ChangeEvent, KeyboardEvent, memo, useState} from "react";
-import '../../App.css'
+import '../../app/App.css'
 import s2 from './AddItemForm.module.css'
 import TextField from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton";

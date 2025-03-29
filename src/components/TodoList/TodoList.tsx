@@ -5,61 +5,58 @@ import {EnableSpan} from "../EnableSpan/EnableSpan";
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Button from "@mui/material/Button";
-import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "../../model/store";
+import {useDispatch} from "react-redux";
 import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, TasksType} from "../../model/task-reducer";
 import {Task} from "../Task/Task";
 import {
     changeTodoListFilterAC,
     changeTodoListTitleAC,
     FilterType,
-    removeTodoListAC
+    removeTodoListAC,
+    TodoListType
 } from "../../model/todolists-reducer";
+import {useAppSelector} from "../../common/hooks/useAppSelector.ts";
+import {selectTasks} from "../../model/tasks-selectors.ts";
 
-type TodoListPropsType = {
-    id: string
-    title: string
-    filter: FilterType
-}
 const getFilteredTasks = (tasks: TasksType[], filter: FilterType): TasksType[] => {
     if (filter === 'Active') return tasks.filter((t) => !t.isDone)
     if (filter === 'Completed') return tasks.filter((t) => t.isDone)
     return tasks
 }
 
-export const TodoList: React.FC<TodoListPropsType> = memo((props) => {
+export const TodoList: React.FC<TodoListType> = memo((props) => {
     const {id, title, filter,} = props
     console.log('todo was called')
 
-    const tasks = useSelector<RootState, TasksType[]>(state => state.tasks[id])
+    const tasks = useAppSelector(selectTasks)
 
     const dispatch = useDispatch()
 
     const onClickChangeFilter = useCallback((filter: FilterType, todoListID: string) => {
-        dispatch(changeTodoListFilterAC(todoListID, filter))
+        dispatch(changeTodoListFilterAC({todoListID, filter}))
     }, [])
 
     const onClickDeleteTodoList = useCallback(() => {
-        dispatch(removeTodoListAC(id))
+        dispatch(removeTodoListAC({todoListID: id}))
     }, [])
 
     const addNewTask = useCallback((title: string) => {
-        dispatch(addTaskAC(title, id))
+        dispatch(addTaskAC({taskTitle: title, todolistID: id}))
     }, [])
 
-    const filteredTasks = getFilteredTasks(tasks, filter)
+    const filteredTasks = getFilteredTasks(tasks[id], filter)
 
     const mappedTasks = filteredTasks.map((t) => {
 
         const onChange = (isDone: boolean) => {
-            dispatch(changeTaskStatusAC(t.id, isDone, id))
+            dispatch(changeTaskStatusAC({taskID: t.id, taskStatus: isDone, todolistID: id}))
         }
         const onClickDeleteTask = () => {
-            dispatch(removeTaskAC(t.id, id))
+            dispatch(removeTaskAC({taskID: t.id, todolistID: id}))
         }
 
         const changeTaskTitle = ((newTaskTitle: string) => {
-            dispatch(changeTaskTitleAC(t.id, newTaskTitle, id))
+            dispatch(changeTaskTitleAC({taskID: t.id, taskTitle: newTaskTitle, todolistID: id}))
         })
         return (
             <div>
@@ -72,8 +69,8 @@ export const TodoList: React.FC<TodoListPropsType> = memo((props) => {
     })
 
     const onClickChangeTodoListTitle = useCallback((newTitle: string) => {
-        dispatch(changeTodoListTitleAC(id, newTitle))
-    }, [id])
+        dispatch(changeTodoListTitleAC({todoListID: id, todoListTitle:newTitle}))
+    }, [])
 
     return (
         <div className={s.todoWrapper} key={id}>
@@ -88,7 +85,7 @@ export const TodoList: React.FC<TodoListPropsType> = memo((props) => {
             </div>
             <div className={s.tasksWrapper}>
                 {
-                    tasks.length === 0
+                    tasks[id].length === 0
                         ? <p className={s.noTasksText}>Тасок нет</p>
                         : mappedTasks
                 }

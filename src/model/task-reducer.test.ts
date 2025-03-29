@@ -101,7 +101,7 @@ test('new array should be added when new todolist is added', () => {
 
 test('property with todolist should be deleted', () => {
 
-    const action = removeTodoListAC('todolistID2')
+    const action = removeTodoListAC({todoListID: 'todolistID2'})
 
     const endState = taskReducer(startState, action)
 

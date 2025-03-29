@@ -1,11 +1,11 @@
-import {v1} from "uuid";
 import {
     addTodoListAC, changeTodoListFilterAC, changeTodoListTitleAC,
     removeTodoListAC,
-    todoListsReducer
+    todolistsReducer
 } from './todolists-reducer';
 import { beforeEach, expect, test } from 'vitest'
 import {FilterType, TodoListType} from "./todolists-reducer.ts"
+import {nanoid} from "@reduxjs/toolkit";
 
 let firstTodoListID : string
 let secondTodoListID : string
@@ -13,8 +13,8 @@ let secondTodoListID : string
 let startState: TodoListType[]
 
 beforeEach(()=> {
-    firstTodoListID = v1()
-    secondTodoListID = v1()
+    firstTodoListID = nanoid()
+    secondTodoListID = nanoid()
 
     startState = [
         {id: firstTodoListID, title: 'What to learn', filter: 'All'},
@@ -25,9 +25,9 @@ beforeEach(()=> {
 
 test('correct todolist should be removed', ()=> {
 
-    const action = removeTodoListAC(firstTodoListID)
+    const action = removeTodoListAC({todoListID: firstTodoListID})
 
-    const endState = todoListsReducer(startState,action)
+    const endState = todolistsReducer(startState,action)
 
     expect(endState.length).toBe(1)
     expect(endState[0].id).toBe(secondTodoListID)
@@ -42,7 +42,7 @@ test('correct todolist should be added', ()=> {
 
     const action = addTodoListAC(newTodoListTitle)
 
-    const endState = todoListsReducer(startState, action)
+    const endState = todolistsReducer(startState, action)
 
     expect(endState.length).toBe(3)
     expect(endState[0].title).toBe(newTodoListTitle)
@@ -53,9 +53,9 @@ test('correct todolist should change title', ()=> {
 
     const newTodoListTitle = 'New Title'
 
-    const action = changeTodoListTitleAC(firstTodoListID, newTodoListTitle)
+    const action = changeTodoListTitleAC({todoListID: firstTodoListID, todoListTitle: newTodoListTitle})
 
-    const endState = todoListsReducer(startState, action)
+    const endState = todolistsReducer(startState, action)
 
     expect(endState.length).toBe(2)
     expect(endState[0].title).toBe(newTodoListTitle)
@@ -66,9 +66,9 @@ test('correct todolist should change filter', ()=> {
 
     const newFilterValue: FilterType = 'Completed'
 
-    const action = changeTodoListFilterAC(firstTodoListID, newFilterValue)
+    const action = changeTodoListFilterAC({todoListID: firstTodoListID, filter: newFilterValue})
 
-    const endState = todoListsReducer(startState, action)
+    const endState = todolistsReducer(startState, action)
 
     expect(endState[0].filter).toBe(newFilterValue)
     expect(endState[1].filter).toBe('All')

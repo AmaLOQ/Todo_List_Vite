@@ -1,15 +1,16 @@
 import {useCallback, useState} from "react";
-import {TodoList} from "./components/TodoList/TodoList";
-import {AddItemForm} from "./components/AddItemForm/AddItemForm";
+import {TodoList} from "../components/TodoList/TodoList.tsx";
+import {AddItemForm} from "../components/AddItemForm/AddItemForm.tsx";
 import './App.css'
-import {Header} from "./components/Header/Header";
+import {Header} from "../components/Header/Header.tsx";
 import Grid from '@mui/material/Grid2';
 import Container from "@mui/material/Container";
 import Paper from '@mui/material/Paper';
-import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "./model/store";
-import {addTodoListAC, TodoListType} from "./model/todolists-reducer";
+import {addTodoListAC} from "../model/todolists-reducer.ts";
 import {createTheme, ThemeProvider, CssBaseline} from "@mui/material";
+import {useAppDispatch} from "../common/hooks/useAppDispatch.ts";
+import {useAppSelector} from "../common/hooks/useAppSelector.ts";
+import {selectTodolists} from "../model/todolists-selectors.ts";
 
 
 export type ThemeModeType = "light" | "dark"
@@ -17,9 +18,9 @@ export type ThemeModeType = "light" | "dark"
 export const App = () => {
     console.log('app was called')
 
-    const todoLists = useSelector<RootState, TodoListType[]>(state => state.todolists)
+    const todoLists = useAppSelector(selectTodolists)
 
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
 
     const [themeMode, setThemeMode] = useState<ThemeModeType>('light')
 
