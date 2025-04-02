@@ -26,8 +26,8 @@ export const tasksReducer = createReducer(initialState, builder => {
         })
         .addCase(removeTaskAC, (state, action) => {
             const correctTasksArray = state[action.payload.todolistID]
-            if (correctTasksArray) {
-                const index = correctTasksArray.findIndex(task => task.id === action.payload.taskID)
+            const index = correctTasksArray.findIndex(task => task.id === action.payload.taskID)
+            if (index !== -1) {
                 correctTasksArray.splice(index, 1)
             }
         })
@@ -38,17 +38,15 @@ export const tasksReducer = createReducer(initialState, builder => {
             }
         })
         .addCase(changeTaskStatusAC, (state, action) => {
-            const correctTasksArray = state[action.payload.todolistID]
-            if(correctTasksArray) {
-                const index = correctTasksArray.findIndex(task => task.id === action.payload.taskID)
-                correctTasksArray[index].isDone = action.payload.taskStatus
+            const correctTask = state[action.payload.todolistID].find(task => task.id === action.payload.taskID)
+            if(correctTask) {
+                correctTask.isDone = action.payload.taskStatus
             }
         })
         .addCase(changeTaskTitleAC, (state, action) => {
-            const correctTasksArray = state[action.payload.todolistID]
-            if(correctTasksArray) {
-                const index = correctTasksArray.findIndex(task => task.id === action.payload.taskID)
-                correctTasksArray[index].task = action.payload.taskTitle
+            const correctTask = state[action.payload.todolistID].find(task => task.id === action.payload.taskID)
+            if(correctTask) {
+                correctTask.task = action.payload.taskTitle
             }
         })
 })
