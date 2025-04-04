@@ -2,9 +2,9 @@ import {
     addTodoListAC, changeTodoListFilterAC, changeTodoListTitleAC,
     removeTodoListAC,
     todolistsReducer
-} from './todolists-reducer';
+} from '../todolists-reducer.ts';
 import { beforeEach, expect, test } from 'vitest'
-import {FilterType, TodoListType} from "./todolists-reducer.ts"
+import {FilterType, TodoListType} from "../todolists-reducer.ts"
 import {nanoid} from "@reduxjs/toolkit";
 
 let firstTodoListID : string

@@ -1,5 +1,5 @@
 import React, {ChangeEvent, memo, useState} from 'react';
-import {capitalizeFirstLetter} from "../AddItemForm/AddItemForm";
+import {capitalizeFirstLetter} from "@/common/components/AddItemForm/AddItemForm.tsx";
 import TextField from "@mui/material/TextField";
 type EnableSpanPropsType = {
     text: string
@@ -22,7 +22,7 @@ export const EnableSpan: React.FC<EnableSpanPropsType> = memo((props) => {
 
     const onBlurChangeTask = () => {
         if(newTaskTitle.trim() !== '') {
-            let correctTitle = capitalizeFirstLetter(newTaskTitle)
+            const correctTitle = capitalizeFirstLetter(newTaskTitle)
             changeTitle(correctTitle.trim())
         } else {
             changeTitle(text)

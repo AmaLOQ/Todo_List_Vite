@@ -1,6 +1,5 @@
 import React, {ChangeEvent, KeyboardEvent, memo, useState} from "react";
-import '../../app/App.css'
-import s2 from './AddItemForm.module.css'
+import s from './AddItemForm.module.css'
 import TextField from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton";
 import AddBox from "@mui/icons-material/AddBox";
@@ -44,7 +43,9 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = memo((props) => {
             }
         }
         const createItemOnEnterHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-            newTaskTitle.trim() !== '' && e.charCode === 13 && onClickAddTask()
+            if(newTaskTitle.trim() !== '' && e.charCode === 13) {
+                onClickAddTask()
+            }
             // if () {
             //     addItem(newTaskTitle.trim())
             //     setNewTaskTitle('')
@@ -59,7 +60,7 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = memo((props) => {
         }
 
         return (
-            <div className={s2.addItemFormWrapper}>
+            <div className={s.addItemFormWrapper}>
                 <TextField
                     color={'primary'}
                     size={'small'}
