@@ -1,7 +1,7 @@
 .addItemFormWrapper {
-    display: flex;
-    align-items: flex-start;
+  display: flex;
+  align-items: flex-start;
 }
 .input {
-    width: 208px;
+  width: 208px;
 }
