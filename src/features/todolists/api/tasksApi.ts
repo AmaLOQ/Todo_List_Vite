@@ -1,24 +1,21 @@
 import { instance } from "@/common/instance"
-import { UpdateTaskModel } from "@/features/todolists/api/tasksApi.types.ts"
+import { DomainTask, GetTasksResponse, UpdateTaskModel } from "@/features/todolists/api/tasksApi.types.ts"
+import { BaseResponse } from "@/common/types"
 
 export const tasksApi = {
   getTasks: (todolistID: string) => {
-    return instance.get(`todo-lists/${todolistID}/tasks`)
+    return instance.get<GetTasksResponse>(`todo-lists/${todolistID}/tasks`)
   },
-  createTask: (payload: { todolistID: string; taskTitle: string }) => {
-    const { todolistID, taskTitle } = payload
-    return instance.post(`todo-lists/${todolistID}/tasks`, { taskTitle })
+  createTask: (payload: { todolistId: string; title: string }) => {
+    const { todolistId, title } = payload
+    return instance.post<BaseResponse<{ item: DomainTask }>>(`todo-lists/${todolistId}/tasks`, { title })
   },
-  deleteTask: (payload: { todolistID: string; taskID: string }) => {
-    const { todolistID, taskID } = payload
-    return instance.delete(`/todo-lists/${todolistID}/tasks/${taskID}`)
+  deleteTask: (payload: { todolistId: string; taskId: string }) => {
+    const { todolistId, taskId } = payload
+    return instance.delete<BaseResponse>(`/todo-lists/${todolistId}/tasks/${taskId}`)
   },
-  changeTaskStatus: (payload: { todolistID: string; taskID: string; model: UpdateTaskModel }) => {
-    const { todolistID, taskID, model } = payload
-    return instance.put(`todo-lists/${todolistID}/tasks/${taskID}`, { model })
-  },
-  changeTaskTitle: (payload: { todolistID: string; taskID: string; model: UpdateTaskModel }) => {
-    const { todolistID, taskID, model } = payload
-    return instance.put(`todo-lists/${todolistID}/tasks/${taskID}`, model)
+  updateTask: (payload: { todolistId: string; taskId: string; model: UpdateTaskModel }) => {
+    const { todolistId, taskId, model } = payload
+    return instance.put<BaseResponse<{ item: DomainTask }>>(`todo-lists/${todolistId}/tasks/${taskId}`, model)
   },
 }

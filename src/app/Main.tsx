@@ -9,8 +9,8 @@ import { useAppDispatch } from "@/common/hooks"
 export const Main = () => {
   const dispatch = useAppDispatch()
 
-  const onClickCreateTodoList = useCallback((todoListTitle: string) => {
-    dispatch(createTodolistTC({ title: todoListTitle }))
+  const onClickCreateTodoList = useCallback((todolistTitle: string) => {
+    dispatch(createTodolistTC(todolistTitle))
   }, [])
 
   return (

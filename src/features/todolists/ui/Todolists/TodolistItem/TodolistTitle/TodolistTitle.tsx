@@ -17,11 +17,11 @@ export const TodolistTitle = ({ todolist }: Props) => {
   const dispatch = useAppDispatch()
 
   const onClickChangeTodolistTitle = useCallback((newTitle: string) => {
-    dispatch(changeTodolistTitleTC({ id: id, title: newTitle }))
+    dispatch(changeTodolistTitleTC({ todolistId: id, title: newTitle }))
   }, [])
 
   const onClickDeleteTodolist = useCallback(() => {
-    dispatch(deleteTodolistTC({ id: id }))
+    dispatch(deleteTodolistTC(id))
   }, [])
 
   return (
