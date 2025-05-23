@@ -4,11 +4,12 @@ import TextField from "@mui/material/TextField"
 type EnableSpanPropsType = {
   text: string
   changeTitle: (newTitle: string) => void
+  disabled?: boolean
 }
 
 export const EnableSpan: React.FC<EnableSpanPropsType> = memo((props) => {
   console.log("edit was called")
-  const { text, changeTitle } = props
+  const { text, changeTitle, disabled } = props
   const [changeMode, setChangeMode] = useState<boolean>(false)
   const [newTaskTitle, setNewTaskTitle] = useState<string>(text)
 
@@ -17,6 +18,7 @@ export const EnableSpan: React.FC<EnableSpanPropsType> = memo((props) => {
   }
 
   const onDoubleClickChangeMode = () => {
+    if (disabled) return
     setChangeMode(true)
   }
 

@@ -2,17 +2,16 @@ import s from "@/features/todolists/ui/Todolists/TodolistItem/TodolistItem.modul
 import IconButton from "@mui/material/IconButton"
 import DeleteIcon from "@mui/icons-material/Delete"
 import { useCallback } from "react"
-import { changeTodolistTitleTC, deleteTodolistTC } from "@/features/todolists/model/todolists-slice.ts"
+import { changeTodolistTitleTC, deleteTodolistTC, DomainTodolist } from "@/features/todolists/model/todolists-slice.ts"
 import { EnableSpan } from "@/common/components"
 import { useAppDispatch } from "@/common/hooks"
-import { Todolist } from "@/features/todolists/api/todolistsApi.types.ts"
 
 type Props = {
-  todolist: Todolist
+  todolist: DomainTodolist
 }
 
 export const TodolistTitle = ({ todolist }: Props) => {
-  const { id, title } = todolist
+  const { id, title, entityStatus } = todolist
 
   const dispatch = useAppDispatch()
 
@@ -24,15 +23,17 @@ export const TodolistTitle = ({ todolist }: Props) => {
     dispatch(deleteTodolistTC(id))
   }, [])
 
+  const isDisabled = entityStatus === "loading"
+
   return (
     <>
       <div className={s.deleteIconWrapper}>
-        <IconButton onClick={onClickDeleteTodolist} aria-label="delete">
+        <IconButton onClick={onClickDeleteTodolist} aria-label="delete" disabled={isDisabled}>
           <DeleteIcon />
         </IconButton>
       </div>
       <h3 className={s.todoListTitle}>
-        <EnableSpan text={title} changeTitle={onClickChangeTodolistTitle} />
+        <EnableSpan text={title} changeTitle={onClickChangeTodolistTitle} disabled={isDisabled} />
       </h3>
     </>
   )

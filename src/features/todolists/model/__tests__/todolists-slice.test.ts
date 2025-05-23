@@ -20,8 +20,8 @@ beforeEach(() => {
   secondTodoListID = nanoid()
 
   startState = [
-    { id: firstTodoListID, title: "What to learn", addedDate: "", order: 0, filter: "All" },
-    { id: secondTodoListID, title: "What to buy", addedDate: "", order: 0, filter: "All" },
+    { id: firstTodoListID, title: "What to learn", addedDate: "", order: 0, filter: "All", entityStatus: "idle" },
+    { id: secondTodoListID, title: "What to buy", addedDate: "", order: 0, filter: "All", entityStatus: "idle" },
   ]
 })
 

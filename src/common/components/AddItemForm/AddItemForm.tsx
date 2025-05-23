@@ -7,6 +7,7 @@ import AddBox from "@mui/icons-material/AddBox"
 type AddItemFormPropsType = {
   addItem: (title: string) => void
   label: string
+  disabled?: boolean
 }
 
 export function capitalizeFirstLetter(str: string) {
@@ -20,7 +21,7 @@ export function capitalizeFirstLetter(str: string) {
 
 export const AddItemForm: React.FC<AddItemFormPropsType> = memo((props) => {
   console.log("addItem was called")
-  const { label, addItem } = props
+  const { label, addItem, disabled } = props
 
   const [error, setError] = useState<null | string>(null)
   const [newTaskTitle, setNewTaskTitle] = useState<string>("")
@@ -74,12 +75,14 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = memo((props) => {
         onKeyPress={createItemOnEnterHandler}
         error={!!error}
         helperText={error}
+        disabled={disabled}
       />
       <IconButton
         size={"medium"}
         style={{ display: "inline-flex", padding: "4px", alignItems: "center" }}
         onClick={onClickAddTask}
         color={"primary"}
+        disabled={disabled}
       >
         <AddBox fontSize={"large"} />
       </IconButton>

@@ -30,7 +30,7 @@ export const Tasks = ({ todolist }: Props) => {
 
   const filteredTasks = getFilteredTasks(tasks[id], filter)
 
-  const mappedTasks = filteredTasks?.map((task) => <TaskItem key={task.id} task={task} todolistId={todolist.id} />)
+  const mappedTasks = filteredTasks?.map((task) => <TaskItem key={task.id} task={task} todolist={todolist} />)
 
   return (
     <div className={s.tasksWrapper}>

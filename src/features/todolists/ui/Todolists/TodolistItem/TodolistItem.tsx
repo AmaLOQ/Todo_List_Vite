@@ -13,7 +13,7 @@ type Props = {
 }
 
 export const TodolistItem = memo(({ todolist }: Props) => {
-  const { id } = todolist
+  const { id, entityStatus } = todolist
 
   const dispatch = useAppDispatch()
 
@@ -25,7 +25,7 @@ export const TodolistItem = memo(({ todolist }: Props) => {
     <div className={s.todoWrapper}>
       <div className={s.topContainer}>
         <TodolistTitle todolist={todolist} />
-        <AddItemForm label={"Add task"} addItem={createTask} />
+        <AddItemForm label={"Add task"} addItem={createTask} disabled={entityStatus === "loading"} />
       </div>
       <Tasks todolist={todolist} />
       <FilterButtons todolist={todolist} />
