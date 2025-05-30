@@ -1,5 +1,5 @@
 import { createAppSlice } from "@/common/utils/createAppSlice.ts"
-import { DomainTask, UpdateTaskModel } from "@/features/todolists/api/tasksApi.types.ts"
+import { DomainTask, DomainTaskSchema, UpdateTaskModel } from "@/features/todolists/api/tasksApi.types.ts"
 import { tasksApi } from "@/features/todolists/api/tasksApi.ts"
 import { setAppStatusAC } from "@/app/app-slice.ts"
 import { RootState } from "@/app/store.ts"
@@ -21,9 +21,11 @@ export const tasksSlice = createAppSlice({
         try {
           dispatch(setAppStatusAC({ status: "loading" }))
           const res = await tasksApi.getTasks(todolistId)
+          const tasks = DomainTaskSchema.array().parse(res.data.items)
           dispatch(setAppStatusAC({ status: "succeeded" }))
-          return { todolistId, tasks: res.data.items }
-        } catch (error: any) {
+          return { todolistId, tasks: tasks }
+        } catch (error) {
+          console.log(error)
           handleServerNetworkError(dispatch, error)
           return rejectWithValue(error)
         }
@@ -46,7 +48,7 @@ export const tasksSlice = createAppSlice({
             handleServerAppError(res.data, dispatch)
             return rejectWithValue(null)
           }
-        } catch (error: any) {
+        } catch (error) {
           handleServerNetworkError(dispatch, error)
           return rejectWithValue(error)
         }
@@ -69,7 +71,7 @@ export const tasksSlice = createAppSlice({
             handleServerAppError(res.data, dispatch)
             return rejectWithValue(null)
           }
-        } catch (error: any) {
+        } catch (error) {
           handleServerNetworkError(dispatch, error)
           return rejectWithValue(error)
         }
@@ -115,7 +117,7 @@ export const tasksSlice = createAppSlice({
             handleServerAppError(res.data, dispatch)
             return rejectWithValue(null)
           }
-        } catch (error: any) {
+        } catch (error) {
           handleServerNetworkError(dispatch, error)
           return rejectWithValue(error)
         }

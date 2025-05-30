@@ -1,10 +1,10 @@
 import s from "./App.module.css"
 import { CssBaseline, ThemeProvider } from "@mui/material"
-import { Main } from "@/app/Main.tsx"
 import { ErrorSnackbar, Header } from "@/common/components"
 import { useAppSelector } from "@/common/hooks"
 import { getTheme } from "@/common/theme"
 import { selectThemeMode } from "@/app/app-slice.ts"
+import { Routing } from "@/common/routing/Routing.tsx"
 
 export const App = () => {
   console.log("app was called")
@@ -18,7 +18,7 @@ export const App = () => {
       <div className={s.app}>
         <CssBaseline />
         <Header />
-        <Main />
+        <Routing />
         <ErrorSnackbar />
       </div>
     </ThemeProvider>

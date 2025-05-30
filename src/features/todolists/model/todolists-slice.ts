@@ -1,4 +1,4 @@
-import { Todolist } from "@/features/todolists/api/todolistsApi.types.ts"
+import { Todolist, TodolistSchema } from "@/features/todolists/api/todolistsApi.types.ts"
 import { todolistApi } from "@/features/todolists/api/todolistApi.ts"
 import { createAppSlice, handleServerAppError, handleServerNetworkError } from "@/common/utils"
 import { setAppStatusAC } from "@/app/app-slice.ts"
@@ -19,9 +19,10 @@ export const todolistsSlice = createAppSlice({
         try {
           dispatch(setAppStatusAC({ status: "loading" }))
           const res = await todolistApi.getTodolist()
+          const todolist = TodolistSchema.array().parse(res.data)
           dispatch(setAppStatusAC({ status: "succeeded" }))
-          return { todolists: res.data }
-        } catch (error: any) {
+          return { todolists: todolist }
+        } catch (error) {
           handleServerNetworkError(dispatch, error)
           return rejectWithValue(error)
         }
@@ -46,7 +47,7 @@ export const todolistsSlice = createAppSlice({
             handleServerAppError(res.data, dispatch)
             return rejectWithValue(null)
           }
-        } catch (error: any) {
+        } catch (error) {
           handleServerNetworkError(dispatch, error)
           return rejectWithValue(error)
         }
@@ -72,7 +73,7 @@ export const todolistsSlice = createAppSlice({
             handleServerAppError(res.data, dispatch)
             return rejectWithValue(null)
           }
-        } catch (error: any) {
+        } catch (error) {
           dispatch(changeTodolistStatusAC({ todolistId, status: "failed" }))
           handleServerNetworkError(dispatch, error)
           return rejectWithValue(error)
@@ -99,7 +100,7 @@ export const todolistsSlice = createAppSlice({
             handleServerAppError(res.data, dispatch)
             return rejectWithValue(null)
           }
-        } catch (error: any) {
+        } catch (error) {
           handleServerNetworkError(dispatch, error)
           return rejectWithValue(error)
         }
