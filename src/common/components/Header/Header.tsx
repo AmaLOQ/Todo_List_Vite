@@ -9,14 +9,23 @@ import { NavButton } from "@/common/components"
 import { useAppDispatch, useAppSelector } from "@/common/hooks"
 import { containerSx } from "@/common/styles"
 import LinearProgress from "@mui/material/LinearProgress"
+import { logoutTC, selectIsLoggedIn } from "@/features/auth/model/auth-slice.ts"
+import { clearDataAC } from "@/common/actions"
+import { NavLink } from "react-router"
 
 export const Header = () => {
   const themeMode = useAppSelector(selectThemeMode)
   const appStatus = useAppSelector(selectAppStatus)
+  const isLoggedIn = useAppSelector(selectIsLoggedIn)
   const dispatch = useAppDispatch()
 
   const changeModeHandler = () => {
     dispatch(changeThemeModeAC({ themeMode: themeMode === "light" ? "dark" : "light" }))
+  }
+
+  const onLogoutHandler = () => {
+    dispatch(logoutTC())
+    dispatch(clearDataAC())
   }
 
   return (
@@ -27,9 +36,10 @@ export const Header = () => {
             <MenuIcon />
           </IconButton>
         </Container>
-        <NavButton>Sign in</NavButton>
-        <NavButton>Sign up</NavButton>
-        <NavButton>Faq</NavButton>
+        {isLoggedIn && <NavButton onClick={onLogoutHandler}>Log out</NavButton>}
+        <NavLink to="/faq">
+          <NavButton>Faq</NavButton>
+        </NavLink>
         <Switch color={"default"} onChange={changeModeHandler} />
       </Toolbar>
       {appStatus === "loading" && <LinearProgress />}
