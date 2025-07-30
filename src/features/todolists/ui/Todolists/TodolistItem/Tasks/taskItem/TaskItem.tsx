@@ -1,41 +1,45 @@
-import React, { ChangeEvent, memo } from "react"
+import React, { memo } from "react"
 import s from "./TaskItem.module.css"
 import Checkbox from "@mui/material/Checkbox"
 import IconButton from "@mui/material/IconButton"
 import DeleteIcon from "@mui/icons-material/Delete"
 import { getListItem } from "./TaskItem.style.ts"
 import { ListItem } from "@mui/material"
-import { deleteTaskTC, updateTaskTC } from "@/features/todolists/model/tasks-slice.ts"
 import { EnableSpan } from "@/common/components"
-import { useAppDispatch } from "@/common/hooks"
-import { DomainTask } from "@/features/todolists/api/tasksApi.types.ts"
+import { DomainTask, UpdateTaskModel } from "@/features/todolists/api/tasksApi.types.ts"
 import { TaskStatus } from "@/common/enums"
 import { DomainTodolist } from "@/features/todolists/model/todolists-slice.ts"
+import { useDeleteTaskMutation, useUpdateTaskMutation } from "@/features/todolists/api/_tasksApi.ts"
 
 type props = {
   task: DomainTask
   todolist: DomainTodolist
 }
 export const TaskItem: React.FC<props> = memo(({ task, todolist }) => {
-  const dispatch = useAppDispatch()
+  const [deleteTask] = useDeleteTaskMutation()
+  const [updateTask] = useUpdateTaskMutation()
 
   const onClickDeleteTask = () => {
-    dispatch(deleteTaskTC({ todolistId: todolist.id, taskId: task.id }))
+    deleteTask({ todolistId: todolist.id, taskId: task.id })
   }
 
-  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const newTaskStatus = e.currentTarget.checked
-    dispatch(
-      updateTaskTC({
-        taskId: task.id,
-        todolistId: todolist.id,
-        domainModel: { status: newTaskStatus ? TaskStatus.Completed : TaskStatus.New },
-      }),
-    )
-  }
+  const onChange = (value: boolean | string) => {
+    let model: UpdateTaskModel = {
+      title: task.title,
+      description: task.description,
+      status: task.status,
+      deadline: task.deadline,
+      priority: task.priority,
+      startDate: task.startDate,
+    }
 
-  const changeTaskTitle = (newTaskTitle: string) => {
-    dispatch(updateTaskTC({ taskId: task.id, todolistId: todolist.id, domainModel: { title: newTaskTitle } }))
+    if (typeof value === "string") {
+      model = { ...model, title: value }
+    }
+    if (typeof value === "boolean") {
+      model = { ...model, status: value ? TaskStatus.Completed : TaskStatus.New }
+    }
+    updateTask({ todolistId: todolist.id, taskId: task.id, model })
   }
 
   const isTaskCompleted = task.status === TaskStatus.Completed
@@ -44,9 +48,14 @@ export const TaskItem: React.FC<props> = memo(({ task, todolist }) => {
   return (
     <div className={s.taskDiv}>
       <ListItem key={task.id} sx={getListItem(isTaskCompleted)}>
-        <Checkbox size={"small"} checked={isTaskCompleted} onChange={onChange} disabled={isDisabled} />
+        <Checkbox
+          size={"small"}
+          checked={isTaskCompleted}
+          onChange={(e) => onChange(e.currentTarget.checked)}
+          disabled={isDisabled}
+        />
         <div className={s.taskContainer}>
-          <EnableSpan text={task.title} changeTitle={changeTaskTitle} disabled={isDisabled} />
+          <EnableSpan text={task.title} changeTitle={onChange} disabled={isDisabled} />
           <IconButton style={{ padding: "0px" }} onClick={onClickDeleteTask} aria-label="delete" disabled={isDisabled}>
             <DeleteIcon />
           </IconButton>

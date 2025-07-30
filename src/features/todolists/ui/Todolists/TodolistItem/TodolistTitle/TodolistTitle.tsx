@@ -2,9 +2,9 @@ import s from "@/features/todolists/ui/Todolists/TodolistItem/TodolistItem.modul
 import IconButton from "@mui/material/IconButton"
 import DeleteIcon from "@mui/icons-material/Delete"
 import { useCallback } from "react"
-import { changeTodolistTitleTC, deleteTodolistTC, DomainTodolist } from "@/features/todolists/model/todolists-slice.ts"
+import { DomainTodolist } from "@/features/todolists/model/todolists-slice.ts"
 import { EnableSpan } from "@/common/components"
-import { useAppDispatch } from "@/common/hooks"
+import { useChangeTodolistTitleMutation, useDeleteTodolistMutation } from "@/features/todolists/api/_todolistApi.ts"
 
 type Props = {
   todolist: DomainTodolist
@@ -13,14 +13,15 @@ type Props = {
 export const TodolistTitle = ({ todolist }: Props) => {
   const { id, title, entityStatus } = todolist
 
-  const dispatch = useAppDispatch()
+  const [deleteTodolist] = useDeleteTodolistMutation()
+  const [changeTodolistTitle] = useChangeTodolistTitleMutation()
 
   const onClickChangeTodolistTitle = useCallback((newTitle: string) => {
-    dispatch(changeTodolistTitleTC({ todolistId: id, title: newTitle }))
+    changeTodolistTitle({ todolistId: id, title: newTitle })
   }, [])
 
   const onClickDeleteTodolist = useCallback(() => {
-    dispatch(deleteTodolistTC(id))
+    deleteTodolist(id)
   }, [])
 
   const isDisabled = entityStatus === "loading"

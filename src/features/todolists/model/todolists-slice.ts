@@ -1,5 +1,5 @@
 import { Todolist, TodolistSchema } from "@/features/todolists/api/todolistsApi.types.ts"
-import { todolistApi } from "@/features/todolists/api/todolistApi.ts"
+import { _todolistApi } from "@/features/todolists/api/_todolistApi.ts"
 import { createAppSlice, handleServerAppError, handleServerNetworkError } from "@/common/utils"
 import { setAppStatusAC } from "@/app/app-slice.ts"
 import { RequestStatus } from "@/common/types"
@@ -19,7 +19,7 @@ export const todolistsSlice = createAppSlice({
       async (_, { dispatch, rejectWithValue }) => {
         try {
           dispatch(setAppStatusAC({ status: "loading" }))
-          const res = await todolistApi.getTodolist()
+          const res = await _todolistApi.getTodolist()
           const todolist = TodolistSchema.array().parse(res.data)
           dispatch(setAppStatusAC({ status: "succeeded" }))
           return { todolists: todolist }
@@ -40,7 +40,7 @@ export const todolistsSlice = createAppSlice({
       async (todolistTitle: string, { dispatch, rejectWithValue }) => {
         try {
           dispatch(setAppStatusAC({ status: "loading" }))
-          const res = await todolistApi.createTodolist(todolistTitle)
+          const res = await _todolistApi.createTodolist(todolistTitle)
           if (res.data.resultCode === ResultCode.Success) {
             dispatch(setAppStatusAC({ status: "succeeded" }))
             return { todolist: res.data.data.item }
@@ -64,7 +64,7 @@ export const todolistsSlice = createAppSlice({
         try {
           dispatch(setAppStatusAC({ status: "loading" }))
           dispatch(changeTodolistStatusAC({ todolistId, status: "loading" }))
-          const res = await todolistApi.deleteTodolist(todolistId)
+          const res = await _todolistApi.deleteTodolist(todolistId)
           if (res.data.resultCode === ResultCode.Success) {
             dispatch(setAppStatusAC({ status: "succeeded" }))
             dispatch(changeTodolistStatusAC({ todolistId, status: "succeeded" }))
@@ -93,7 +93,7 @@ export const todolistsSlice = createAppSlice({
       async (payload: { todolistId: string; title: string }, { dispatch, rejectWithValue }) => {
         try {
           dispatch(setAppStatusAC({ status: "loading" }))
-          const res = await todolistApi.changeTodolistTitle(payload)
+          const res = await _todolistApi.changeTodolistTitle(payload)
           if (res.data.resultCode === ResultCode.Success) {
             dispatch(setAppStatusAC({ status: "succeeded" }))
             return payload
@@ -176,7 +176,7 @@ export type FilterType = "All" | "Active" | "Completed"
 //   `${todolistsSlice.name}/changeTodolistTitleTC`,
 //   async (payload: { id: string; title: string }, thunkAPI) => {
 //     try {
-//       await todolistApi.changeTodolistTitle(payload)
+//       await _todolistApi.changeTodolistTitle(payload)
 //       return payload
 //     } catch {
 //       return thunkAPI.rejectWithValue(null)
@@ -187,7 +187,7 @@ export type FilterType = "All" | "Active" | "Completed"
 //   `${todolistsSlice.name}/createTodolistTC`,
 //   async (payload: { title: string }, thunkAPI) => {
 //     try {
-//       const res = await todolistApi.createTodolist(payload.title)
+//       const res = await _todolistApi.createTodolist(payload.title)
 //       return { todolist: res.data.data.item }
 //     } catch {
 //       return thunkAPI.rejectWithValue(null)
@@ -199,7 +199,7 @@ export type FilterType = "All" | "Active" | "Completed"
 //   `${todolistsSlice.name}/deleteTodolistTC`,
 //   async (id: string, thunkAPI) => {
 //     try {
-//       await todolistApi.deleteTodolist(id)
+//       await _todolistApi.deleteTodolist(id)
 //       return { id }
 //     } catch {
 //       return thunkAPI.rejectWithValue(null)

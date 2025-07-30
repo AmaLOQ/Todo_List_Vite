@@ -5,8 +5,7 @@ import { DomainTodolist } from "@/features/todolists/model/todolists-slice.ts"
 import { Tasks } from "@/features/todolists/ui/Todolists/TodolistItem/Tasks/Tasks.tsx"
 import { TodolistTitle } from "@/features/todolists/ui/Todolists/TodolistItem/TodolistTitle/TodolistTitle.tsx"
 import { FilterButtons } from "@/features/todolists/ui/Todolists/TodolistItem/FilterButtons/FilterButtons.tsx"
-import { createTaskTC } from "@/features/todolists/model/tasks-slice.ts"
-import { useAppDispatch } from "@/common/hooks"
+import { useCreateTaskMutation } from "@/features/todolists/api/_tasksApi.ts"
 
 type Props = {
   todolist: DomainTodolist
@@ -15,17 +14,17 @@ type Props = {
 export const TodolistItem = memo(({ todolist }: Props) => {
   const { id, entityStatus } = todolist
 
-  const dispatch = useAppDispatch()
+  const [createTask] = useCreateTaskMutation()
 
-  const createTask = useCallback((title: string) => {
-    dispatch(createTaskTC({ title, todolistId: id }))
+  const createTaskHandler = useCallback((title: string) => {
+    createTask({ title, todolistId: id })
   }, [])
 
   return (
     <div className={s.todoWrapper}>
       <div className={s.topContainer}>
         <TodolistTitle todolist={todolist} />
-        <AddItemForm label={"Add task"} addItem={createTask} disabled={entityStatus === "loading"} />
+        <AddItemForm label={"Add task"} addItem={createTaskHandler} disabled={entityStatus === "loading"} />
       </div>
       <Tasks todolist={todolist} />
       <FilterButtons todolist={todolist} />

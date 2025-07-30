@@ -1,13 +1,13 @@
 import s from "@/features/todolists/ui/Todolists/TodolistItem/TodolistItem.module.css"
-import { fetchTasksTC, selectTasks } from "@/features/todolists/model/tasks-slice.ts"
 import { TaskItem } from "@/features/todolists/ui/Todolists/TodolistItem/Tasks/taskItem/TaskItem.tsx"
 import { DomainTodolist, FilterType } from "@/features/todolists/model/todolists-slice.ts"
-import { useAppDispatch, useAppSelector } from "@/common/hooks"
-import { useEffect } from "react"
 import { DomainTask } from "@/features/todolists/api/tasksApi.types.ts"
 import { TaskStatus } from "@/common/enums"
+import { useGetTasksQuery } from "@/features/todolists/api/_tasksApi.ts"
 
-const getFilteredTasks = (tasks: DomainTask[], filter: FilterType): DomainTask[] => {
+const getFilteredTasks = (tasks: DomainTask[] | undefined, filter: FilterType): DomainTask[] => {
+  if (!tasks) return []
+
   if (filter === "Active") return tasks.filter((t) => t.status === TaskStatus.New)
   if (filter === "Completed") return tasks.filter((t) => t.status === TaskStatus.Completed)
   return tasks
@@ -20,21 +20,17 @@ type Props = {
 export const Tasks = ({ todolist }: Props) => {
   const { id, filter } = todolist
 
-  const tasks = useAppSelector(selectTasks)
+  const { data } = useGetTasksQuery(id)
 
-  const dispatch = useAppDispatch()
+  const tasks = data?.items
 
-  useEffect(() => {
-    dispatch(fetchTasksTC(id))
-  }, [])
-
-  const filteredTasks = getFilteredTasks(tasks[id], filter)
+  const filteredTasks = getFilteredTasks(tasks, filter)
 
   const mappedTasks = filteredTasks?.map((task) => <TaskItem key={task.id} task={task} todolist={todolist} />)
 
   return (
     <div className={s.tasksWrapper}>
-      {tasks[todolist.id]?.length === 0 ? <p className={s.noTasksText}>Тасок нет</p> : mappedTasks}
+      {filteredTasks.length === 0 ? <p className={s.noTasksText}>Тасок нет</p> : mappedTasks}
     </div>
   )
 }
