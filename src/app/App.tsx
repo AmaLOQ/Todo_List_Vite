@@ -6,7 +6,7 @@ import { getTheme } from "@/common/theme"
 import { selectThemeMode, setIsLoggedIn } from "@/app/app-slice.ts"
 import { Routing } from "@/common/routing/Routing.tsx"
 import { useEffect, useState } from "react"
-import { useMeQuery } from "@/features/auth/api/_authApi.ts"
+import { useMeQuery } from "@/features/auth/api/authApi.ts"
 import { ResultCode } from "@/common/enums/enums.ts"
 
 export const App = () => {

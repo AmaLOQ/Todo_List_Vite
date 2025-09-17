@@ -2,9 +2,11 @@ import s from "@/features/todolists/ui/Todolists/TodolistItem/TodolistItem.modul
 import IconButton from "@mui/material/IconButton"
 import DeleteIcon from "@mui/icons-material/Delete"
 import { useCallback } from "react"
-import { DomainTodolist } from "@/features/todolists/model/todolists-slice.ts"
 import { EnableSpan } from "@/common/components"
-import { useChangeTodolistTitleMutation, useDeleteTodolistMutation } from "@/features/todolists/api/_todolistApi.ts"
+import { useChangeTodolistTitleMutation, useDeleteTodolistMutation } from "@/features/todolists/api/todolistApi.ts"
+import { DomainTodolist } from "@/features/todolists/lib/types"
+import { useAppDispatch } from "@/common/hooks"
+import { changeTodolistStatus } from "@/common/utils"
 
 type Props = {
   todolist: DomainTodolist
@@ -16,13 +18,20 @@ export const TodolistTitle = ({ todolist }: Props) => {
   const [deleteTodolist] = useDeleteTodolistMutation()
   const [changeTodolistTitle] = useChangeTodolistTitleMutation()
 
+  const dispatch = useAppDispatch()
+
   const onClickChangeTodolistTitle = useCallback((newTitle: string) => {
     changeTodolistTitle({ todolistId: id, title: newTitle })
   }, [])
 
-  const onClickDeleteTodolist = useCallback(() => {
+  const onClickDeleteTodolist = () => {
+    dispatch(changeTodolistStatus("loading", id))
     deleteTodolist(id)
-  }, [])
+      .unwrap()
+      .catch(() => {
+        dispatch(changeTodolistStatus("idle", id))
+      })
+  }
 
   const isDisabled = entityStatus === "loading"
 
