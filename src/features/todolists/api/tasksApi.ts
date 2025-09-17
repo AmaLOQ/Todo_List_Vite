@@ -1,4 +1,3 @@
-import { instance } from "@/common/instance"
 import { DomainTask, GetTasksResponse, UpdateTaskModel } from "@/features/todolists/api/tasksApi.types.ts"
 import { BaseResponse } from "@/common/types"
 import { baseApi } from "@/app/baseApi.ts"
@@ -41,21 +40,3 @@ export const taskApi = baseApi.injectEndpoints({
 })
 
 export const { useGetTasksQuery, useCreateTaskMutation, useDeleteTaskMutation, useUpdateTaskMutation } = taskApi
-
-export const _tasksApi = {
-  getTasks: (todolistID: string) => {
-    return instance.get<GetTasksResponse>(`todo-lists/${todolistID}/tasks`)
-  },
-  createTask: (payload: { todolistId: string; title: string }) => {
-    const { todolistId, title } = payload
-    return instance.post<BaseResponse<{ item: DomainTask }>>(`todo-lists/${todolistId}/tasks`, { title })
-  },
-  deleteTask: (payload: { todolistId: string; taskId: string }) => {
-    const { todolistId, taskId } = payload
-    return instance.delete<BaseResponse>(`/todo-lists/${todolistId}/tasks/${taskId}`)
-  },
-  updateTask: (payload: { todolistId: string; taskId: string; model: UpdateTaskModel }) => {
-    const { todolistId, taskId, model } = payload
-    return instance.put<BaseResponse<{ item: DomainTask }>>(`todo-lists/${todolistId}/tasks/${taskId}`, model)
-  },
-}

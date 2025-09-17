@@ -6,7 +6,7 @@ import { AddItemForm } from "@/common/components"
 import { useAppSelector } from "@/common/hooks"
 import { Navigate } from "react-router"
 import { PATH } from "@/common/routing"
-import { useCreateTodolistMutation } from "@/features/todolists/api/_todolistApi.ts"
+import { useCreateTodolistMutation } from "@/features/todolists/api/todolistApi.ts"
 import { selectIsLoggedIn } from "@/app/app-slice.ts"
 
 export const Main = () => {

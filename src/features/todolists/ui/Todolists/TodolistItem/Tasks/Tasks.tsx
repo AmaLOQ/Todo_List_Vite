@@ -3,7 +3,8 @@ import { TaskItem } from "@/features/todolists/ui/Todolists/TodolistItem/Tasks/t
 import { DomainTodolist, FilterType } from "@/features/todolists/model/todolists-slice.ts"
 import { DomainTask } from "@/features/todolists/api/tasksApi.types.ts"
 import { TaskStatus } from "@/common/enums"
-import { useGetTasksQuery } from "@/features/todolists/api/_tasksApi.ts"
+import { useGetTasksQuery } from "@/features/todolists/api/tasksApi.ts"
+import { TasksSkeleton } from "@/features/todolists/ui/Todolists/TodolistItem/Tasks/TaskSkeleton/TaskSkeleton.tsx"
 
 const getFilteredTasks = (tasks: DomainTask[] | undefined, filter: FilterType): DomainTask[] => {
   if (!tasks) return []
@@ -20,13 +21,17 @@ type Props = {
 export const Tasks = ({ todolist }: Props) => {
   const { id, filter } = todolist
 
-  const { data } = useGetTasksQuery(id)
+  const { data, isLoading } = useGetTasksQuery(id)
 
   const tasks = data?.items
 
   const filteredTasks = getFilteredTasks(tasks, filter)
 
   const mappedTasks = filteredTasks?.map((task) => <TaskItem key={task.id} task={task} todolist={todolist} />)
+
+  if (isLoading) {
+    return <TasksSkeleton />
+  }
 
   return (
     <div className={s.tasksWrapper}>

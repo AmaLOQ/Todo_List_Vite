@@ -5,7 +5,7 @@ import { DomainTodolist } from "@/features/todolists/model/todolists-slice.ts"
 import { Tasks } from "@/features/todolists/ui/Todolists/TodolistItem/Tasks/Tasks.tsx"
 import { TodolistTitle } from "@/features/todolists/ui/Todolists/TodolistItem/TodolistTitle/TodolistTitle.tsx"
 import { FilterButtons } from "@/features/todolists/ui/Todolists/TodolistItem/FilterButtons/FilterButtons.tsx"
-import { useCreateTaskMutation } from "@/features/todolists/api/_tasksApi.ts"
+import { useCreateTaskMutation } from "@/features/todolists/api/tasksApi.ts"
 
 type Props = {
   todolist: DomainTodolist

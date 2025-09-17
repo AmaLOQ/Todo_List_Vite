@@ -8,19 +8,31 @@ import { ListItem } from "@mui/material"
 import { EnableSpan } from "@/common/components"
 import { DomainTask, UpdateTaskModel } from "@/features/todolists/api/tasksApi.types.ts"
 import { TaskStatus } from "@/common/enums"
-import { DomainTodolist } from "@/features/todolists/model/todolists-slice.ts"
-import { useDeleteTaskMutation, useUpdateTaskMutation } from "@/features/todolists/api/_tasksApi.ts"
+import { useDeleteTaskMutation, useUpdateTaskMutation } from "@/features/todolists/api/tasksApi.ts"
+import { DomainTodolist } from "@/features/todolists/lib/types"
+import { useAppDispatch } from "@/common/hooks"
+import { changeTodolistStatus } from "@/common/utils"
 
 type props = {
   task: DomainTask
   todolist: DomainTodolist
 }
 export const TaskItem: React.FC<props> = memo(({ task, todolist }) => {
-  const [deleteTask] = useDeleteTaskMutation()
+  const [deleteTaskMutation] = useDeleteTaskMutation()
   const [updateTask] = useUpdateTaskMutation()
 
+  const dispatch = useAppDispatch()
+
   const onClickDeleteTask = () => {
-    deleteTask({ todolistId: todolist.id, taskId: task.id })
+    dispatch(changeTodolistStatus("loading", todolist.id))
+    deleteTaskMutation({ todolistId: todolist.id, taskId: task.id })
+      .unwrap()
+      .then(() => {
+        dispatch(changeTodolistStatus("succeeded", todolist.id))
+      })
+      .catch(() => {
+        dispatch(changeTodolistStatus("idle", todolist.id))
+      })
   }
 
   const onChange = (value: boolean | string) => {

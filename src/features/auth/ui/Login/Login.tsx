@@ -9,11 +9,11 @@ import FormGroup from "@mui/material/FormGroup"
 import FormLabel from "@mui/material/FormLabel"
 import Grid from "@mui/material/Grid2"
 import TextField from "@mui/material/TextField"
-import { Controller, SubmitHandler, useForm } from "react-hook-form"
+import { Controller, useForm } from "react-hook-form"
 import styles from "./Login.module.css"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { loginSchema, LoginType } from "@/features/auth/lib"
-import { useLoginMutation } from "@/features/auth/api/_authApi.ts"
+import { useLoginMutation } from "@/features/auth/api/authApi.ts"
 import { ResultCode } from "@/common/enums/enums.ts"
 import { AUTH_TOKEN } from "@/common/constants"
 
@@ -36,7 +36,7 @@ export const Login = () => {
     defaultValues: { email: "", password: "", rememberMe: false },
   })
 
-  const onSubmit: SubmitHandler<LoginType> = (data) => {
+  const onSubmit = (data: LoginType) => {
     login(data).then((res) => {
       if (res.data?.resultCode === ResultCode.Success) {
         dispatch(setIsLoggedIn({ isLoggedIn: true }))

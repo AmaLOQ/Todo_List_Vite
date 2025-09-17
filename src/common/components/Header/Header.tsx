@@ -15,11 +15,11 @@ import { NavButton } from "@/common/components"
 import { useAppDispatch, useAppSelector } from "@/common/hooks"
 import { containerSx } from "@/common/styles"
 import LinearProgress from "@mui/material/LinearProgress"
-import { clearDataAC } from "@/common/actions"
 import { NavLink } from "react-router"
-import { useLoguotMutation } from "@/features/auth/api/_authApi.ts"
+import { useLoguotMutation } from "@/features/auth/api/authApi.ts"
 import { ResultCode } from "@/common/enums/enums.ts"
 import { AUTH_TOKEN } from "@/common/constants"
+import { baseApi } from "@/app/baseApi.ts"
 
 export const Header = () => {
   const themeMode = useAppSelector(selectThemeMode)
@@ -34,13 +34,16 @@ export const Header = () => {
   }
 
   const onLogoutHandler = () => {
-    logout().then((res) => {
-      if (res.data?.resultCode === ResultCode.Success) {
-        localStorage.removeItem(AUTH_TOKEN)
-        dispatch(clearDataAC())
-        dispatch(setIsLoggedIn({ isLoggedIn: false }))
-      }
-    })
+    logout()
+      .then((res) => {
+        if (res.data?.resultCode === ResultCode.Success) {
+          localStorage.removeItem(AUTH_TOKEN)
+          dispatch(setIsLoggedIn({ isLoggedIn: false }))
+        }
+      })
+      .then(() => {
+        dispatch(baseApi.util.invalidateTags(["Todolists", "Tasks"]))
+      })
   }
 
   return (
