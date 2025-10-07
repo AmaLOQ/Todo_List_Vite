@@ -2,3 +2,7 @@
     color: red;
     font-size: 14px;
 }
+.reloadCaptcha {
+    cursor: pointer;
+    text-decoration: underline;
+}

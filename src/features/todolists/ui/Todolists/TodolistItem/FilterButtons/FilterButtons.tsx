@@ -1,10 +1,10 @@
 import { useCallback } from "react"
 import Button from "@mui/material/Button"
-import { DomainTodolist, FilterType } from "@/features/todolists/model/todolists-slice.ts"
 import { Box } from "@mui/material"
 import { containerSx } from "@/common/styles"
 import { todolistApi } from "@/features/todolists/api/todolistApi.ts"
 import { useAppDispatch } from "@/common/hooks"
+import { DomainTodolist, FilterType } from "@/features/todolists/lib/types"
 
 type Props = {
   todolist: DomainTodolist

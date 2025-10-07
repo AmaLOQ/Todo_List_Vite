@@ -13,9 +13,10 @@ import { Controller, useForm } from "react-hook-form"
 import styles from "./Login.module.css"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { loginSchema, LoginType } from "@/features/auth/lib"
-import { useLoginMutation } from "@/features/auth/api/authApi.ts"
+import { useLazyGetCaptchaUrlQuery, useLoginMutation } from "@/features/auth/api/authApi.ts"
 import { ResultCode } from "@/common/enums/enums.ts"
 import { AUTH_TOKEN } from "@/common/constants"
+import Typography from "@mui/material/Typography"
 
 export const Login = () => {
   const themeMode = useAppSelector(selectThemeMode)
@@ -24,6 +25,7 @@ export const Login = () => {
   const dispatch = useAppDispatch()
 
   const [login] = useLoginMutation()
+  const [getCaptcha, { data: captchaUrl }] = useLazyGetCaptchaUrlQuery()
 
   const {
     register,
@@ -33,7 +35,7 @@ export const Login = () => {
     formState: { errors },
   } = useForm<LoginType>({
     resolver: zodResolver(loginSchema),
-    defaultValues: { email: "", password: "", rememberMe: false },
+    defaultValues: { email: "", password: "", rememberMe: false, captcha: "" },
   })
 
   const onSubmit = (data: LoginType) => {
@@ -42,8 +44,17 @@ export const Login = () => {
         dispatch(setIsLoggedIn({ isLoggedIn: true }))
         localStorage.setItem(AUTH_TOKEN, res.data.data.token)
         reset()
+      } else if (res.data?.resultCode === ResultCode.CaptchaError) {
+        getCaptcha()
+        reset()
+      } else {
+        return
       }
     })
+  }
+
+  const changeCaptchaUrlHandler = () => {
+    getCaptcha()
   }
 
   const onError = () => {
@@ -91,6 +102,15 @@ export const Login = () => {
                 />
               }
             />
+            {captchaUrl && <img src={captchaUrl?.url} alt={"captcha picture"} />}
+            {captchaUrl && (
+              <Typography className={styles.reloadCaptcha} onClick={changeCaptchaUrlHandler}>
+                Обновить картинку
+              </Typography>
+            )}
+            {captchaUrl && (
+              <TextField type="text" label="Fill symbols from picture" margin="normal" {...register("captcha")} />
+            )}
             <Button type="submit" variant="contained" color="primary">
               Login
             </Button>

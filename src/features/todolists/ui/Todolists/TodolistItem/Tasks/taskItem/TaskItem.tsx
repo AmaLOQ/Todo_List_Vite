@@ -16,8 +16,9 @@ import { changeTodolistStatus } from "@/common/utils"
 type props = {
   task: DomainTask
   todolist: DomainTodolist
+  page: number
 }
-export const TaskItem: React.FC<props> = memo(({ task, todolist }) => {
+export const TaskItem: React.FC<props> = memo(({ task, todolist, page }) => {
   const [deleteTaskMutation] = useDeleteTaskMutation()
   const [updateTask] = useUpdateTaskMutation()
 
@@ -51,7 +52,7 @@ export const TaskItem: React.FC<props> = memo(({ task, todolist }) => {
     if (typeof value === "boolean") {
       model = { ...model, status: value ? TaskStatus.Completed : TaskStatus.New }
     }
-    updateTask({ todolistId: todolist.id, taskId: task.id, model })
+    updateTask({ todolistId: todolist.id, taskId: task.id, model, page })
   }
 
   const isTaskCompleted = task.status === TaskStatus.Completed

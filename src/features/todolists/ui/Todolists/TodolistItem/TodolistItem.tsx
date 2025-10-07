@@ -1,11 +1,11 @@
 import { memo, useCallback } from "react"
 import s from "./TodolistItem.module.css"
 import { AddItemForm } from "@/common/components/AddItemForm/AddItemForm.tsx"
-import { DomainTodolist } from "@/features/todolists/model/todolists-slice.ts"
 import { Tasks } from "@/features/todolists/ui/Todolists/TodolistItem/Tasks/Tasks.tsx"
 import { TodolistTitle } from "@/features/todolists/ui/Todolists/TodolistItem/TodolistTitle/TodolistTitle.tsx"
 import { FilterButtons } from "@/features/todolists/ui/Todolists/TodolistItem/FilterButtons/FilterButtons.tsx"
 import { useCreateTaskMutation } from "@/features/todolists/api/tasksApi.ts"
+import { DomainTodolist } from "@/features/todolists/lib/types"
 
 type Props = {
   todolist: DomainTodolist
